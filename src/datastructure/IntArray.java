@@ -16,19 +16,13 @@ public class IntArray {
 
     public void insert(int pos, int n) {
         if (size++ < data.length) {
-            for (int i = data.length - 1; i > pos; --i) {
-                data[i] = data[i - 1];
-            }
+            if (data.length - 1 - pos >= 0) System.arraycopy(data, pos, data, pos + 1, data.length - 1 - pos);
             data[pos] = n;
         } else {
             int[] tmp = new int[size * 2];
-            for (int i = 0; i < pos; ++i) {
-                tmp[i] = data[i];
-            }
+            if (pos >= 0) System.arraycopy(data, 0, tmp, 0, pos);
             tmp[pos] = n;
-            for (int i = pos; i < data.length; ++i) {
-                tmp[i + 1] = data[i];
-            }
+            if (data.length - pos >= 0) System.arraycopy(data, pos, tmp, pos + 1, data.length - pos);
             data = tmp;
         }
     }
@@ -46,9 +40,7 @@ public class IntArray {
     }
 
     public void delete(int pos) {
-        for (int i = pos + 1; i < size; ++i) {
-            data[i - 1] = data[i];
-        }
+        if (size - (pos + 1) >= 0) System.arraycopy(data, pos + 1, data, pos + 1 - 1, size - (pos + 1));
         --size;
     }
 
@@ -57,5 +49,15 @@ public class IntArray {
         for (int i = 0; i < size; ++i) {
             System.out.println("[" + i + "]: " + data[i]);
         }
+    }
+
+    public static void main(String[] args) {
+        IntArray a = new IntArray();
+        a.insert(5);
+        a.insert(2);
+        a.insert(0, 1);
+        a.update(0, a.get(2));
+        a.delete(0);
+        a.print();
     }
 }
